@@ -75,3 +75,15 @@ tools/                skrip pipeline data (butuh input PDF & XLSX):
   111→SSPA0110441, 119→SSPA0112950; part lain diberi kandidat terdekat atau tanda "—".
 - File: `js/ebara-data.js` (data part+material+kode), `js/ebara.js` (scene/exploded/picking),
   `js/tabs.js` (pindah tab Bauer ↔ Ebara).
+
+## Tab 3 — IRRILAND Hose Travel Irrigator (Silver series)
+- Model 3D rakit + **exploded view** + posisi **cart operasi / transport** (pill di topbar, meniru foto manual).
+- Sumber posisi part: manual Irriland Silver series 2018-02-01 (pict/pos 1–59): pos 1 turbin+by-pass,
+  pos 9 rod disengagement, pos 10 nipple grease, pos 12 safety dog, pos 14/24 hand wheel PTO,
+  pos 15 pressure gauge, pos 16 central elbow, pos 19/20 O-ring & nylon packing, pos 25 seal mekanikal,
+  pos 26 double lip seal, pos 27/29 quick coupling, pos 30/32 gearbox 3-speed, pos 35 kaki angkur,
+  pos 55/56 kompensasi kecepatan, pos 58 guide fork.
+- Kode internal spreadsheet (Sheet2) padanan langsung: SFMS0102456 (nipple M8), SSPA0305376 (ball-steel
+  turbin Bondioli), SSPA0305408 (O-ring packing), SSPA0305409 (nylon packing), SSPA0305432 (seal 16 mm),
+  SSPA0323712 (selang hidrolik 3/8"), SSPA0324467 (hand pump hidrolik).
+- File: `js/irriland-data.js`, `js/irriland.js`; tab switching di `js/tabs.js` (3 view).

@@ -11,6 +11,7 @@
 <nav id="tabs">
   <button id="tabBauer" class="on">🚜 Bauer Rainstar E</button>
   <button id="tabEbara">💧 Pompa Ebara FSA</button>
+  <button id="tabIrril">🌾 Irriland Hose Travel</button>
   <span class="tinfo">Explorator sparepart & material • klik tab untuk pindah mesin</span>
 </nav>
 <header id="topbar">
@@ -172,6 +173,67 @@
     </aside>
   </div>
 </div>
+<div id="viewIrril" class="hidden">
+  <header id="irTop">
+    <div class="brand">
+      <span class="drop">🌾</span>
+      <div>
+        <h1>IRRILAND <small>Silver series</small></h1>
+        <p>Hose travel irrigator • manual 2018-02-01 • material &amp; kode internal Sheet2</p>
+      </div>
+    </div>
+    <div class="models" id="irBoomPills" title="Posisi sprinkler cart">
+      <button data-boom="op" class="on">Cart operasi</button>
+      <button data-boom="tr">Cart transport</button>
+    </div>
+    <div class="topbtns" style="margin-left:auto">
+      <button id="irCsv" class="tbtn" title="Unduh list material sebagai CSV">⬇ CSV</button>
+    </div>
+  </header>
+  <div id="irApp">
+    <aside id="irLeft">
+      <h2>Parts irrigator</h2>
+      <p class="hint">Klik untuk sorot &amp; lihat breakdown material + kode internal.</p>
+      <ul id="irGroups"></ul>
+      <div class="left-foot">
+        <div class="legend">
+          <b>Status kode internal</b>
+          <span><i class="dot ok"></i>ada padanan di spreadsheet</span>
+          <span><i class="dot no"></i>pakai kandidat / tanpa padanan</span>
+        </div>
+      </div>
+    </aside>
+    <main id="irStage">
+      <canvas id="irCanvas"></canvas>
+      <div id="irTip" class="hidden"></div>
+      <div id="irCrumb" class="hidden"></div>
+      <div id="irCtl">
+        <button id="irZin" title="Zoom in">＋</button>
+        <button id="irZout" title="Zoom out">－</button>
+        <button id="irHome" title="Tampilan awal">⌂</button>
+        <button id="irSpin" title="Putar otomatis">↻</button>
+        <button id="irExplode" class="off" title="Exploded view">⬌</button>
+        <button id="irLabels" class="off" title="Label posisi manual">🏷</button>
+      </div>
+      <div id="irToast" class="hidden"></div>
+    </main>
+    <aside id="irRight">
+      <nav class="tabs">
+        <button data-t="det" class="tab active">Breakdown part</button>
+        <button data-t="list" class="tab">Semua material</button>
+        <button data-t="info" class="tab">Pencocokan</button>
+      </nav>
+      <section id="irDet" class="tabpage">
+        <div class="empty">
+          <p>🖱 <b>Klik salah satu part</b> pada model 3D (atau daftar di kiri) untuk melihat material manual beserta kode material internalnya.</p>
+          <p class="muted">Scroll = zoom • drag = putar • klik kanan drag = geser.</p>
+        </div>
+      </section>
+      <section id="irList" class="tabpage hidden"></section>
+      <section id="irInfo" class="tabpage hidden"></section>
+    </aside>
+  </div>
+</div>
 <div id="modal" class="hidden"><div class="modal-box"><button id="modalClose">✕</button><div id="modalBody"></div></div></div>
 <div id="helpModal" class="hidden"><div class="modal-box help">
   <button id="helpClose">✕</button>
@@ -193,6 +255,8 @@
 <script src="js/app.js"></script>
 <script src="js/ebara-data.js"></script>
 <script src="js/ebara.js"></script>
+<script src="js/irriland-data.js"></script>
+<script src="js/irriland.js"></script>
 <script src="js/tabs.js"></script>
 </body>
 </html>

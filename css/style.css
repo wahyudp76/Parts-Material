@@ -276,3 +276,79 @@ table.parts tr.flash{animation:fl 1.6s ease}
 .allbar{display:flex; gap:6px; margin-bottom:8px}
 .allbar input{flex:1}
 .notebox{margin-top:12px; font-size:11.5px; color:var(--muted); border-left:3px solid var(--line); padding:2px 0 2px 10px; line-height:1.5}
+
+/* ---------- view Irriland (tab ketiga, template sama) ---------- */
+#viewIrril{flex:1; display:flex; flex-direction:column; min-height:0}
+#irTop{
+  display:flex; align-items:center; gap:14px; padding:8px 14px;
+  background:linear-gradient(180deg,#182029,#131a22); border-bottom:1px solid var(--line); z-index:20;
+}
+#irApp{flex:1; display:flex; min-height:0}
+#irLeft{
+  width:230px; background:var(--panel); border-right:1px solid var(--line);
+  padding:12px 10px; overflow:auto; flex-shrink:0;
+}
+#irLeft h2{font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--acc2)}
+#irLeft .hint{font-size:11.5px; color:var(--muted); margin:4px 0 10px}
+#irGroups{list-style:none}
+#irGroups li{
+  display:flex; align-items:center; gap:8px; padding:7px 8px; margin:2px 0;
+  border-radius:8px; cursor:pointer; border:1px solid transparent;
+}
+#irGroups li:hover{background:var(--panel2)}
+#irGroups li.on{background:var(--panel2); border-color:var(--acc)}
+#irGroups li.gh{
+  display:block; cursor:default; margin:12px 0 2px; padding:0 8px;
+  color:var(--acc2); font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.8px;
+}
+#irGroups li.gh small{display:block; color:var(--muted); font-weight:400; text-transform:none; letter-spacing:0; font-size:10.5px}
+#irGroups li.gh:hover{background:none}
+#irGroups .sw{width:12px; height:12px; border-radius:3px; flex-shrink:0; box-shadow:0 0 0 1px #0006 inset}
+#irGroups .nm{font-size:12.5px; line-height:1.25}
+#irGroups .nm small{display:block; color:var(--muted); font-size:10.5px}
+#irLeft .left-foot{margin-top:14px; border-top:1px solid var(--line); padding-top:10px}
+#irStage{position:relative; flex:1; min-width:0; background:#0b0f14}
+#irCanvas{position:absolute; inset:0; width:100%; height:100%; display:block}
+#irTip{
+  position:absolute; pointer-events:none; z-index:15; background:#000c; border:1px solid var(--acc);
+  padding:4px 9px; border-radius:8px; font-size:12px; white-space:nowrap;
+}
+#irCrumb{
+  position:absolute; top:10px; left:10px; z-index:14; background:#000a; border:1px solid var(--line);
+  border-left:4px solid var(--acc); padding:6px 12px; border-radius:8px; font-size:12.5px;
+}
+#irCrumb b{color:var(--acc2)}
+#irCtl{
+  position:absolute; right:10px; top:10px; z-index:14; display:flex; flex-direction:column; gap:6px;
+  background:#0009; border:1px solid var(--line); border-radius:12px; padding:8px;
+}
+#irCtl button{
+  width:34px; height:34px; border-radius:9px; background:var(--panel2); border:1px solid var(--line); font-size:16px;
+}
+#irCtl button:hover{border-color:var(--acc)}
+#irCtl button.on{background:var(--acc); color:#160b04; border-color:var(--acc)}
+#irCtl button.off{opacity:.55}
+#irToast{
+  position:absolute; left:50%; bottom:18px; transform:translateX(-50%); z-index:18;
+  background:#000d; border:1px solid var(--acc); border-radius:10px; padding:8px 16px;
+  font-size:12.5px; max-width:80%; text-align:center; animation:tin .25s ease;
+}
+#irToast b{color:var(--acc2)}
+#irRight{
+  width:430px; flex-shrink:0; background:var(--panel); border-left:1px solid var(--line);
+  display:flex; flex-direction:column; min-height:0;
+}
+/* kartu detail part */
+.drow{display:flex; gap:10px; padding:7px 2px; border-top:1px solid var(--line); font-size:12.5px}
+.drow b{width:118px; flex-shrink:0; color:var(--muted); font-weight:600}
+.drow .ct{display:block; color:var(--muted); font-size:11px; margin-top:3px; line-height:1.4}
+.subh{margin:12px 0 4px; font-size:12px; color:var(--acc2); font-weight:700}
+.cands{list-style:none}
+.cands li{padding:5px 0; border-top:1px solid #22303e66; font-size:12px}
+.cands .ct{display:block; color:var(--muted); font-size:11px; margin-top:2px}
+.code{font-family:Consolas,monospace; font-size:11.5px; border-radius:6px; padding:1px 7px; border:1px solid var(--line)}
+.code.ok{background:#123524; border-color:var(--ok); color:#7ee2a8}
+.code.no{color:var(--muted)}
+.allbar{display:flex; gap:6px; margin-bottom:8px}
+.allbar input{flex:1}
+.notebox{margin-top:12px; font-size:11.5px; color:var(--muted); border-left:3px solid var(--line); padding:2px 0 2px 10px; line-height:1.5}
