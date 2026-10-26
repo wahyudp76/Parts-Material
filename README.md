@@ -62,3 +62,16 @@ tools/                skrip pipeline data (butuh input PDF & XLSX):
 
 - PDF: *PARTBAUER RAINSTAR E1–E5 — Ersatzteilliste 827 9909 (VI-2011)*, Röhren- und Pumpenwerk BAUER Ges.m.b.H.
 - Spreadsheet: *ABC INDIKATOR MATERIAL* (Sheet1 & Sheet2).
+
+## Tab 2 — Pompa EBARA FSA (end suction volute pump, 50 Hz)
+- Model 3D rakit + **exploded view** (tombol 🧩) dengan label nomor fig brosur.
+- Sumber geometri & material: brosur EBARA FSA 50 Hz (FS513CT-R0E), *sectional view* hal. 4
+  (001 Casing, 011 Casing Cover, 021 Impeller, 031 Shaft, 048/050 nut+washer, 051 Bearing Housing,
+  053 Bearing Cover, 056 Ball Bearing, 085 Lantern Ring, 091 Gland, 093 Deflector, 095 Bearing Support,
+  107 Casing Ring, 110 Gland Bolt, 111 Mechanical Seal + sub-komponen 111-1..6, 119 Gland Packing, 206 Plug, G O-Ring).
+- Toggle jenis perapat: **Mechanical Seal (standar)** ↔ **Gland Packing (opsional)**.
+- Klik part → panel material brosur + **kode internal spreadsheet (Sheet2)**:
+  padanan langsung: 001→SSPA0109900, 021→SSPA0106997, 031→SSPA0107540, 051→SSPA0106998,
+  111→SSPA0110441, 119→SSPA0112950; part lain diberi kandidat terdekat atau tanda "—".
+- File: `js/ebara-data.js` (data part+material+kode), `js/ebara.js` (scene/exploded/picking),
+  `js/tabs.js` (pindah tab Bauer ↔ Ebara).
