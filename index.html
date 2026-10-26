@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bauer Rainstar E — Explorator Sparepart Interaktif</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💧</text></svg>">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header id="topbar">
+  <div class="brand">
+    <span class="drop">💧</span>
+    <div>
+      <h1>BAUER RAINSTAR E <small>E1–E5</small></h1>
+      <p>Explorator sparepart interaktif • sketsa 3D dari katalog Ersatzeilliste 827 9909</p>
+    </div>
+  </div>
+  <div class="models" id="modelPills" title="Pilih model untuk menampilkan kebutuhan qty per model"></div>
+  <div class="searchwrap">
+    <input id="search" type="search" placeholder="Cari sparepart / kode…  (mis. 827 6157, bearing, SDEL…)" autocomplete="off">
+    <div id="searchDrop" class="drop-panel hidden"></div>
+  </div>
+  <div class="topbtns">
+    <button id="btnCsv" class="tbtn" title="Unduh hasil pencocokan sebagai CSV">⬇ CSV</button>
+    <button id="btnHelp" class="tbtn" title="Bantuan">?</button>
+  </div>
+</header>
+
+<div id="app">
+  <aside id="left">
+    <h2>Parts utama</h2>
+    <p class="hint">Klik untuk zoom &amp; breakdown sparepart.</p>
+    <ul id="groupList"></ul>
+    <div class="left-foot">
+      <div class="legend">
+        <b>Status kode internal</b>
+        <span><i class="dot ok"></i> ada di spreadsheet</span>
+        <span><i class="dot no"></i> pakai Bestell-Nr. Bauer</span>
+      </div>
+    </div>
+  </aside>
+
+  <main id="stage">
+    <canvas id="scene"></canvas>
+    <div id="tooltip" class="hidden"></div>
+    <div id="crumb" class="hidden"></div>
+    <div id="stageCtl">
+      <button id="zIn"  title="Zoom in">＋</button>
+      <button id="zOut" title="Zoom out">－</button>
+      <button id="zReset" title="Reset tampilan">⌂</button>
+      <button id="rot" class="off" title="Putar otomatis">⟳</button>
+      <button id="lbl" title="Label parts">🏷</button>
+      <button id="foto" title="Foto katalog asli">📷</button>
+      <div class="sliderwrap" title="Exploded view">
+        <label for="explode">💥</label><input id="explode" type="range" min="0" max="100" value="0">
+      </div>
+    </div>
+    <div id="fotoOverlay" class="hidden">
+      <img src="assets/cover.jpg" alt="Foto katalog Bauer Rainstar E">
+      <button id="fotoClose">✕ tutup foto</button>
+    </div>
+    <div id="loadOverlay"><div class="spin"></div><p>Menyiapkan model 3D…</p></div>
+  </main>
+
+  <aside id="right">
+    <nav class="tabs">
+      <button data-tab="breakdown" class="tab active">Breakdown part</button>
+      <button data-tab="all" class="tab">Semua sparepart</button>
+      <button data-tab="info" class="tab">Pencocokan</button>
+    </nav>
+
+    <section id="tab-breakdown" class="tabpage">
+      <div id="bdEmpty" class="empty">
+        <p>🖱 <b>Klik salah satu part</b> pada model 3D (atau daftar di kiri) untuk melihat breakdown sparepart beserta kode material internalnya.</p>
+        <p class="muted">Scroll = zoom • drag = putar • klik kanan drag = geser.</p>
+      </div>
+      <div id="bdContent" class="hidden"></div>
+    </section>
+
+    <section id="tab-all" class="tabpage hidden">
+      <div class="allbar">
+        <input id="allFilter" type="search" placeholder="Filter nama / kode…">
+        <select id="allSection"></select>
+        <select id="allStatus">
+          <option value="">Semua status</option>
+          <option value="match">Punya kode internal</option>
+          <option value="none">Tanpa kode internal</option>
+        </select>
+        <span id="allCount" class="count"></span>
+      </div>
+      <div id="allTable"></div>
+    </section>
+
+    <section id="tab-info" class="tabpage hidden">
+      <div id="infoBody"></div>
+    </section>
+  </aside>
+</div>
+
+<div id="modal" class="hidden"><div class="modal-box"><button id="modalClose">✕</button><div id="modalBody"></div></div></div>
+<div id="helpModal" class="hidden"><div class="modal-box help">
+  <button id="helpClose">✕</button>
+  <h2>Cara pakai</h2>
+  <ol>
+    <li><b>Putar &amp; zoom</b> model 3D: drag = putar, scroll / tombol ＋－ = zoom in-out, klik-kanan drag = geser.</li>
+    <li><b>Klik part utama</b> (drum, turbin, gearbox, dll.) → kamera zoom ke part tsb dan panel kanan menampilkan <b>breakdown sparepart</b> dari katalog Bauer.</li>
+    <li>Setiap baris sparepart menampilkan <b>Bestell-Nr. Bauer</b> dan — bila berhasil dicocokkan — <b>kode material internal</b> dari spreadsheet <i>ABC INDIKATOR MATERIAL</i> lengkap dengan indikator ABC, satuan, dan moving price.</li>
+    <li>Chip hijau = kode internal ditemukan; chip abu-abu = tidak ada di master material, pesan menggunakan Bestell-Nr. Bauer.</li>
+    <li>Slider 💥 = exploded view; 🏷 = label; 📷 = foto katalog asli sebagai pembanding sketsa 3D.</li>
+    <li>Tab <b>Semua sparepart</b> = tabel lengkap 703 varian part yang bisa difilter; tab <b>Pencocokan</b> = metodologi &amp; statistik; tombol ⬇ CSV = unduh hasil pencocokan.</li>
+  </ol>
+  <p class="muted">Sumber: PDF Ersatzeilliste Bauer Rainstar E (E1–E5) 827 9909 VI-2011 &amp; spreadsheet ABC INDIKATOR MATERIAL (Sheet1/Sheet2).</p>
+</div></div>
+
+<script src="js/three.min.js"></script>
+<script src="js/OrbitControls.js"></script>
+<script src="js/parts-data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
