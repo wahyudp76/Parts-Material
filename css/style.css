@@ -201,52 +201,78 @@ table.parts tr.flash{animation:fl 1.6s ease}
 #tabs button.on{background:var(--acc); color:#160b04}
 #tabs .tinfo{margin-left:auto; font-size:11px; color:var(--muted)}
 
-/* ---------- view Ebara ---------- */
+/* ---------- view Ebara (meniru template tab Bauer) ---------- */
 #viewEbara{flex:1; display:flex; flex-direction:column; min-height:0}
-#ebTop{display:flex; align-items:center; gap:14px; padding:8px 14px; background:linear-gradient(180deg,#182029,#131a22); border-bottom:1px solid var(--line)}
-#ebTop .ebBrand b{font-size:16px; letter-spacing:.5px; color:#7fd4c1}
-#ebTop .ebBrand small{display:block; color:var(--muted); font-size:11px}
-#ebTop .ebBtns{margin-left:auto; display:flex; gap:6px}
-#ebTop .tbtn.on{background:var(--acc); color:#160b04; border-color:var(--acc)}
-#ebBody{flex:1; display:flex; min-height:0}
-#ebLeft{width:250px; background:var(--panel); border-right:1px solid var(--line); padding:12px 10px; overflow:auto; flex-shrink:0}
-#ebLeft h2{font-size:13px; text-transform:uppercase; letter-spacing:1px; color:#7fd4c1}
+#ebTop{
+  display:flex; align-items:center; gap:14px; padding:8px 14px;
+  background:linear-gradient(180deg,#182029,#131a22); border-bottom:1px solid var(--line); z-index:20;
+}
+#ebApp{flex:1; display:flex; min-height:0}
+#ebLeft{
+  width:230px; background:var(--panel); border-right:1px solid var(--line);
+  padding:12px 10px; overflow:auto; flex-shrink:0;
+}
+#ebLeft h2{font-size:13px; text-transform:uppercase; letter-spacing:1px; color:var(--acc2)}
 #ebLeft .hint{font-size:11.5px; color:var(--muted); margin:4px 0 10px}
 #ebGroups{list-style:none}
-#ebGroups li{display:flex; align-items:center; gap:8px; padding:6px 8px; margin:2px 0; border-radius:8px; cursor:pointer; border:1px solid transparent; font-size:12.5px}
+#ebGroups li{
+  display:flex; align-items:center; gap:8px; padding:7px 8px; margin:2px 0;
+  border-radius:8px; cursor:pointer; border:1px solid transparent;
+}
 #ebGroups li:hover{background:var(--panel2)}
 #ebGroups li.on{background:var(--panel2); border-color:var(--acc)}
-#ebGroups li.gh{cursor:default; margin-top:10px; color:var(--acc2); font-weight:700; font-size:11.5px; text-transform:uppercase; letter-spacing:.6px}
-#ebGroups li.gh small{display:block; color:var(--muted); font-weight:400; text-transform:none; letter-spacing:0}
+#ebGroups li.gh{
+  display:block; cursor:default; margin:12px 0 2px; padding:0 8px;
+  color:var(--acc2); font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.8px;
+}
+#ebGroups li.gh small{display:block; color:var(--muted); font-weight:400; text-transform:none; letter-spacing:0; font-size:10.5px}
 #ebGroups li.gh:hover{background:none}
-#ebGroups .sw{width:11px; height:11px; border-radius:3px; flex-shrink:0}
+#ebGroups .sw{width:12px; height:12px; border-radius:3px; flex-shrink:0; box-shadow:0 0 0 1px #0006 inset}
+#ebGroups .nm{font-size:12.5px; line-height:1.25}
+#ebGroups .nm small{display:block; color:var(--muted); font-size:10.5px}
+#ebLeft .left-foot{margin-top:14px; border-top:1px solid var(--line); padding-top:10px}
 #ebStage{position:relative; flex:1; min-width:0; background:#0b0f14}
 #ebCanvas{position:absolute; inset:0; width:100%; height:100%; display:block}
-#ebTip{position:absolute; pointer-events:none; z-index:15; background:#000c; border:1px solid var(--acc); padding:4px 9px; border-radius:8px; font-size:12px; white-space:nowrap}
-#ebHint{position:absolute; bottom:10px; left:12px; font-size:11px; color:var(--muted); background:#0008; padding:4px 10px; border-radius:8px}
-#ebRight{width:360px; background:var(--panel); border-left:1px solid var(--line); display:flex; flex-direction:column; min-height:0; flex-shrink:0}
-#ebRight .rtabs{display:flex; border-bottom:1px solid var(--line)}
-#ebRight .rtab{flex:1; padding:9px; font-weight:700; color:var(--muted); border-bottom:2px solid transparent}
-#ebRight .rtab.on{color:var(--txt); border-bottom-color:var(--acc)}
-#ebDet{padding:12px 14px; overflow:auto}
-#ebList{padding:10px 12px; overflow:auto}
-#ebDetail h3, #ebDet h3{font-size:15px; margin-bottom:2px}
-#ebDet .fig{display:inline-block; background:var(--acc); color:#160b04; border-radius:6px; padding:1px 8px; font-size:12px; margin-right:6px}
-#ebDet .en{font-size:11.5px; margin-bottom:8px}
-#ebDet .kv{display:flex; gap:10px; padding:6px 0; border-top:1px solid var(--line); font-size:12.5px}
-#ebDet .kv b{width:110px; flex-shrink:0; color:var(--muted); font-weight:600}
-#ebDet .kv .ct{display:block; color:var(--muted); font-size:11px; margin-top:2px}
-#ebDet .subh{margin:10px 0 4px; font-size:12px; color:var(--acc2); font-weight:700}
-#ebDet .cands{list-style:none}
-#ebDet .cands li{padding:4px 0; font-size:12px}
+#ebTip{
+  position:absolute; pointer-events:none; z-index:15; background:#000c; border:1px solid var(--acc);
+  padding:4px 9px; border-radius:8px; font-size:12px; white-space:nowrap;
+}
+#ebCrumb{
+  position:absolute; top:10px; left:10px; z-index:14; background:#000a; border:1px solid var(--line);
+  border-left:4px solid var(--acc); padding:6px 12px; border-radius:8px; font-size:12.5px;
+}
+#ebCrumb b{color:var(--acc2)}
+#ebCtl{
+  position:absolute; right:10px; top:10px; z-index:14; display:flex; flex-direction:column; gap:6px;
+  background:#0009; border:1px solid var(--line); border-radius:12px; padding:8px;
+}
+#ebCtl button{
+  width:34px; height:34px; border-radius:9px; background:var(--panel2); border:1px solid var(--line); font-size:16px;
+}
+#ebCtl button:hover{border-color:var(--acc)}
+#ebCtl button.on{background:var(--acc); color:#160b04; border-color:var(--acc)}
+#ebCtl button.off{opacity:.55}
+#ebToast{
+  position:absolute; left:50%; bottom:18px; transform:translateX(-50%); z-index:18;
+  background:#000d; border:1px solid var(--acc); border-radius:10px; padding:8px 16px;
+  font-size:12.5px; max-width:80%; text-align:center; animation:tin .25s ease;
+}
+#ebToast b{color:var(--acc2)}
+#ebRight{
+  width:430px; flex-shrink:0; background:var(--panel); border-left:1px solid var(--line);
+  display:flex; flex-direction:column; min-height:0;
+}
+/* kartu detail part */
+.drow{display:flex; gap:10px; padding:7px 2px; border-top:1px solid var(--line); font-size:12.5px}
+.drow b{width:118px; flex-shrink:0; color:var(--muted); font-weight:600}
+.drow .ct{display:block; color:var(--muted); font-size:11px; margin-top:3px; line-height:1.4}
+.subh{margin:12px 0 4px; font-size:12px; color:var(--acc2); font-weight:700}
+.cands{list-style:none}
+.cands li{padding:5px 0; border-top:1px solid #22303e66; font-size:12px}
+.cands .ct{display:block; color:var(--muted); font-size:11px; margin-top:2px}
 .code{font-family:Consolas,monospace; font-size:11.5px; border-radius:6px; padding:1px 7px; border:1px solid var(--line)}
 .code.ok{background:#123524; border-color:var(--ok); color:#7ee2a8}
 .code.no{color:var(--muted)}
-.cpy{background:var(--chip); border:1px solid var(--line); border-radius:6px; padding:1px 7px; font-size:11px; cursor:pointer}
-table.pt{width:100%; border-collapse:collapse; font-size:11.5px; margin-top:4px}
-table.pt th{text-align:left; color:var(--muted); font-weight:600; border-bottom:1px solid var(--line); padding:4px 6px}
-table.pt td{border-bottom:1px solid var(--line); padding:4px 6px; vertical-align:top}
-table.pt tr[data-id]{cursor:pointer}
-table.pt tr[data-id]:hover{background:var(--panel2)}
-#ebDet .note, #ebList .note{margin-top:10px; font-size:11px; color:var(--muted); border-left:3px solid var(--line); padding-left:8px}
-#ebDet .empty{color:var(--muted); font-size:12.5px; padding:20px 6px}
+.allbar{display:flex; gap:6px; margin-bottom:8px}
+.allbar input{flex:1}
+.notebox{margin-top:12px; font-size:11.5px; color:var(--muted); border-left:3px solid var(--line); padding:2px 0 2px 10px; line-height:1.5}

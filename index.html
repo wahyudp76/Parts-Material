@@ -112,24 +112,63 @@
 
 </div><!-- /viewBauer -->
 <div id="viewEbara" class="hidden">
-  <div id="ebTop">
-    <div class="ebBrand"><b>EBARA FSA</b><small>End Suction Volute Pump • 50 Hz • brosur FS513CT-R0E</small></div>
-    <div class="ebBtns">
-      <button id="ebExplode" class="tbtn">🧩 Exploded: OFF</button>
-      <button id="ebSeal" class="tbtn" title="Ganti jenis perapat poros">🔁 Seal: <span id="ebSealLabel">Mechanical Seal (standar)</span></button>
-      <button id="ebZin" class="tbtn">＋</button>
-      <button id="ebZout" class="tbtn">－</button>
-      <button id="ebReset" class="tbtn">⌂</button>
+  <header id="ebTop">
+    <div class="brand">
+      <span class="drop">💧</span>
+      <div>
+        <h1>EBARA FSA <small>50 Hz</small></h1>
+        <p>End suction volute pump • brosur FS513CT-R0E • material &amp; kode internal Sheet2</p>
+      </div>
     </div>
-  </div>
-  <div id="ebBody">
-    <aside id="ebLeft"><h2>Part pompa</h2><p class="hint">Klik untuk sorot & lihat material + kode internal</p><ul id="ebGroups"></ul></aside>
-    <div id="ebStage"><canvas id="ebCanvas"></canvas><div id="ebTip" class="hidden"></div>
-      <div id="ebHint">drag = putar • scroll = zoom • klik part = detail</div></div>
+    <div class="models" id="ebSealPills" title="Jenis perapat poros">
+      <button data-seal="mech" class="on">Mechanical Seal</button>
+      <button data-seal="gland">Gland Packing</button>
+    </div>
+    <div class="topbtns" style="margin-left:auto">
+      <button id="ebCsv" class="tbtn" title="Unduh list material sebagai CSV">⬇ CSV</button>
+    </div>
+  </header>
+  <div id="ebApp">
+    <aside id="ebLeft">
+      <h2>Parts pompa</h2>
+      <p class="hint">Klik untuk sorot &amp; lihat breakdown material + kode internal.</p>
+      <ul id="ebGroups"></ul>
+      <div class="left-foot">
+        <div class="legend">
+          <b>Status kode internal</b>
+          <span><i class="dot ok"></i>ada padanan di spreadsheet</span>
+          <span><i class="dot no"></i>pakai kandidat / tanpa padanan</span>
+        </div>
+      </div>
+    </aside>
+    <main id="ebStage">
+      <canvas id="ebCanvas"></canvas>
+      <div id="ebTip" class="hidden"></div>
+      <div id="ebCrumb" class="hidden"></div>
+      <div id="ebCtl">
+        <button id="ebZin" title="Zoom in">＋</button>
+        <button id="ebZout" title="Zoom out">－</button>
+        <button id="ebHome" title="Tampilan awal">⌂</button>
+        <button id="ebSpin" title="Putar otomatis">↻</button>
+        <button id="ebExplode" class="off" title="Exploded view">⬌</button>
+        <button id="ebLabels" class="off" title="Label nomor fig">🏷</button>
+      </div>
+      <div id="ebToast" class="hidden"></div>
+    </main>
     <aside id="ebRight">
-      <div class="rtabs"><button class="rtab on" data-t="det">Detail part</button><button class="rtab" data-t="list">List material</button></div>
-      <div id="ebDet"></div>
-      <div id="ebList" class="hidden"></div>
+      <nav class="tabs">
+        <button data-t="det" class="tab active">Breakdown part</button>
+        <button data-t="list" class="tab">Semua material</button>
+        <button data-t="info" class="tab">Pencocokan</button>
+      </nav>
+      <section id="ebDet" class="tabpage">
+        <div class="empty">
+          <p>🖱 <b>Klik salah satu part</b> pada model 3D (atau daftar di kiri) untuk melihat material brosur beserta kode material internalnya.</p>
+          <p class="muted">Scroll = zoom • drag = putar • klik kanan drag = geser.</p>
+        </div>
+      </section>
+      <section id="ebList" class="tabpage hidden"></section>
+      <section id="ebInfo" class="tabpage hidden"></section>
     </aside>
   </div>
 </div>
