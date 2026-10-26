@@ -91,10 +91,10 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xdfe9f2);
 scene.fog = new THREE.Fog(0xdfe9f2, 26, 60);
 const camera = new THREE.PerspectiveCamera(45, 2, 0.1, 200);
-camera.position.set(8.2, 4.3, -9.8);
+camera.position.set(-9.9, 4.1, -7.5);
 const controls = new THREE.OrbitControls(camera, canvas);
 controls.enableDamping = true; controls.dampingFactor = .08;
-controls.target.set(-0.7, 1.8, 0);
+controls.target.set(-1.2, 2.0, -0.4);
 controls.maxPolarAngle = Math.PI * .52; controls.minDistance = 1.2; controls.maxDistance = 40;
 
 scene.add(new THREE.HemisphereLight(0xffffff, 0x77808c, .95));
@@ -106,9 +106,9 @@ scene.add(sun);
 
 const ground = new THREE.Mesh(
   new THREE.CircleGeometry(34, 48),
-  new THREE.MeshStandardMaterial({ color: 0x71905c, roughness: 1 }));
+  new THREE.MeshStandardMaterial({ color: 0x8f7350, roughness: 1 }));
 ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
-const grid = new THREE.GridHelper(30, 30, 0x5d7a4b, 0x64814f);
+const grid = new THREE.GridHelper(30, 30, 0x7a6244, 0x6d573c);
 grid.position.y = .01;
 grid.material.transparent = true; grid.material.opacity = .35;
 scene.add(grid);
@@ -142,108 +142,144 @@ const TOR = (r, t, s = 28) => new THREE.TorusGeometry(r, t, 10, s);
 
 const WHEELS = [];
 const C = {
-  galv: 0x9aa0a6, dark: 0x5b6470, orange: 0xd94f1e, orange2: 0xe06020, black: 0x232323,
-  silver: 0xcfd4d9, white: 0xf2f2f2, yellow: 0xf2b705, green: 0x7fb069, blue: 0x4f7cac,
-  solar: 0x1b2a4a, red: 0xc8552e, rubber: 0x1a1a1c,
+  galv: 0x9aa0a6, dark: 0x4a4038, black: 0x26221e, pipe: 0x2e2a24,
+  silver: 0xb9c0c6, white: 0xe8e6df, yellow: 0xc9a83c, green: 0x7fb069, blue: 0x2e6da4,
+  solar: 0x1b2a4a, red: 0xa33b2e, rust: 0x9c6b4a, flange: 0x8a4a3a, flangeD: 0x6b352c,
+  chain: 0x3a3a3a, mud: 0x4a3f33,
 };
 
-/* ---------------- build the machine ---------------- */
+/* ---------------- build the machine (meniru foto unit riil BTI) ---------------- */
+function tube(gid, pts, r, color, metal, rough) {
+  const cur = new THREE.CatmullRomCurve3(pts.map(p => new THREE.Vector3(...p)));
+  return add(gid, new THREE.TubeGeometry(cur, 48, r, 12), color, 0, 0, 0, metal, rough);
+}
 function buildMachine() {
-  /* -- undercarriage -- */
-  add('fahrgestell', BOX(4.4, .26, .12), C.galv, 0, .75, .72);
-  add('fahrgestell', BOX(4.4, .26, .12), C.galv, 0, .75, -.72);
-  [-1.9, -.7, .5, 1.7].forEach(x => add('fahrgestell', BOX(.14, .22, 1.5), C.galv, x, .74, 0));
-  add('fahrgestell', BOX(1.7, .12, .12), C.galv, 2.85, .62, 0);
-  const eye = add('fahrgestell', TOR(.12, .045), C.dark, 3.75, .62, 0); eye.rotation.y = Math.PI / 2;
-  [-0.85, 0.45].forEach(x => {
-    const ax = add('fahrgestell', CYL(.07, .07, 1.9, 12), C.dark, x, .48, 0); ax.rotation.x = Math.PI / 2;
-    [.88, -.88].forEach(z => {
-      const w = add('fahrgestell', CYL(.48, .48, .3, 28), C.rubber, x, .48, z); w.rotation.x = Math.PI / 2; WHEELS.push(w);
-      const h = add('fahrgestell', CYL(.2, .2, .32, 20), C.silver, x, .48, z); h.rotation.x = Math.PI / 2; WHEELS.push(h);
+  /* == rangka bawah: sasis kanal berkarat + bogie tandem == */
+  add('fahrgestell', BOX(4.6, .3, .15), C.rust, 0, .8, .78);
+  add('fahrgestell', BOX(4.6, .3, .15), C.rust, 0, .8, -.78);
+  [-2.0, -.8, .4, 1.6].forEach(x => add('fahrgestell', BOX(.16, .26, 1.6), C.rust, x, .78, 0));
+  add('fahrgestell', BOX(1.9, .15, .15), C.yellow, 2.95, .66, 0);
+  const eye = add('fahrgestell', TOR(.13, .05), C.dark, 3.95, .66, 0); eye.rotation.y = Math.PI / 2;
+  [-1.0, .55].forEach(x => {
+    const ax = add('fahrgestell', CYL(.08, .08, 1.95, 12), C.dark, x, .5, 0); ax.rotation.x = Math.PI / 2;
+    [.92, -.92].forEach(z => {
+      const w = add('fahrgestell', CYL(.5, .5, .32, 26), C.mud, x, .5, z); w.rotation.x = Math.PI / 2; WHEELS.push(w);
+      const h = add('fahrgestell', CYL(.19, .19, .34, 18), C.rust, x, .5, z); h.rotation.x = Math.PI / 2; WHEELS.push(h);
     });
   });
-  /* -- support legs -- */
-  [.45, -.45].forEach(z => {
-    add('stuetzfuss', CYL(.05, .05, .85, 14), C.yellow, 3.15, .55, z);
-    add('stuetzfuss', BOX(.3, .06, .3), C.yellow, 3.15, .06, z);
-    const cr = add('stuetzfuss', TOR(.12, .02, 16), C.dark, 3.15, 1.0, z); cr.rotation.x = Math.PI / 2;
+  /* == kaki penyangga spindel == */
+  [.5, -.5].forEach(z => {
+    add('stuetzfuss', CYL(.05, .05, .9, 14), C.yellow, 3.3, .55, z);
+    add('stuetzfuss', BOX(.32, .06, .32), C.yellow, 3.3, .06, z);
+    const cr = add('stuetzfuss', TOR(.13, .02, 16), C.dark, 3.3, 1.02, z); cr.rotation.x = Math.PI / 2;
   });
-  /* -- turntable -- */
-  const ring = add('drehgestell', TOR(.85, .09, 36), C.dark, 0, 1.02, 0); ring.rotation.x = Math.PI / 2;
-  add('drehgestell', BOX(1.9, .12, 1.55), C.dark, 0, 1.12, 0);
-  [.8, -.8].forEach(z => add('drehgestell', BOX(2.0, .55, .08), C.dark, 0, 1.42, z));
-  /* -- reel / haspel -- */
-  [ .88, -.88].forEach(x => {
-    const f = add('haspel', CYL(1.18, 1.18, .09, 40), C.orange, x, 2.35, 0); f.rotation.z = Math.PI / 2;
-    add('haspel', TOR(1.18, .05, 40), C.orange, x, 2.35, 0).rotation.y = Math.PI / 2;
+  /* == meja putar == */
+  const ring = add('drehgestell', TOR(.9, .1, 36), C.rust, 0, 1.06, 0); ring.rotation.x = Math.PI / 2;
+  add('drehgestell', BOX(2.0, .14, 1.62), C.rust, 0, 1.18, 0);
+  [.84, -.84].forEach(z => add('drehgestell', BOX(2.1, .62, .09), C.rust, 0, 1.5, z));
+  add('drehgestell', BOX(.06, 1.7, .16), C.yellow, 1.2, 1.95, -.55);
+  add('drehgestell', BOX(.06, 1.7, .16), C.yellow, 1.2, 1.95, -1.35);
+  add('drehgestell', BOX(.05, 1.3, 1.0), C.flange, 1.16, 2.1, -.95);
+  /* == haspel: flange panel segmen + ring rantai + koil ber-rib == */
+  [1.0, -1.0].forEach(xf => {
+    const f = add('haspel', CYL(1.22, 1.22, .07, 44), C.flange, xf, 2.35, 0); f.rotation.z = Math.PI / 2;
+    const rim = add('haspel', TOR(1.22, .06, 44), C.flangeD, xf, 2.35, 0); rim.rotation.y = Math.PI / 2;
+    for (let k = 0; k < 8; k++) {           // seam panel pie
+      const a = k * Math.PI / 4;
+      const s = add('haspel', BOX(.045, 1.16, .03), C.flangeD, xf + (xf > 0 ? .05 : -.05),
+        Math.cos(a) * .58, 2.35 + Math.sin(a) * .58);
+      s.rotation.x = a;
+    }
+    for (let k = 0; k < 12; k++) {          // bolt ring
+      const a = k * Math.PI / 6;
+      const b = add('haspel', CYL(.025, .025, .05, 8), C.dark, xf + (xf > 0 ? .06 : -.06),
+        2.35 + Math.cos(a) * 1.06, Math.sin(a) * 1.06);
+      b.rotation.z = Math.PI / 2;
+    }
+    const ch = add('haspel', TOR(1.27, .03, 52), C.chain, xf + (xf > 0 ? .1 : -.1), 2.35, 0);
+    ch.rotation.y = Math.PI / 2;            // rantai keliling flange
   });
-  const core = add('haspel', CYL(.3, .3, 1.8, 24), C.silver, 0, 2.35, 0); core.rotation.z = Math.PI / 2;
-  const coil = add('haspel', CYL(.98, .98, 1.62, 48), C.black, 0, 2.35, 0, .1, .95); coil.rotation.z = Math.PI / 2;
-  for (let i = 0; i < 5; i++)
-    add('haspel', TOR(.99, .015, 48), 0x333333, -0.65 + i * .325, 2.35, 0, .1, .95).rotation.y = Math.PI / 2;
-  const pipeCurve = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(-.95, 2.1, 0), new THREE.Vector3(-1.7, 1.2, 0),
-    new THREE.Vector3(-2.6, .32, 0), new THREE.Vector3(-3.8, .3, 0), new THREE.Vector3(-4.7, 1.0, 0)]);
-  add('haspel', new THREE.TubeGeometry(pipeCurve, 60, .05, 10), C.black, 0, 0, 0, .1, .9);
-  /* -- drive -- */
-  add('antrieb', BOX(1.35, 1.15, .06), C.orange2, -.9, 1.95, -1.02);
-  const p1 = add('antrieb', CYL(.32, .32, .12, 24), C.silver, -.65, 2.35, -1.1); p1.rotation.x = Math.PI / 2;
-  const p2 = add('antrieb', CYL(.17, .17, .12, 20), C.silver, -.95, 1.62, -1.1); p2.rotation.x = Math.PI / 2;
-  const belt = add('antrieb', TOR(.3, .028), C.black, -.8, 1.98, -1.1); belt.scale.set(1, 1.55, 1); belt.rotation.z = .35;
-  /* -- gearbox -- */
-  add('getriebe', BOX(.8, .62, .5), C.orange2, -.95, 1.42, -.95, .4, .5);
-  for (let i = 0; i < 3; i++) {
-    const rib = add('getriebe', CYL(.28, .28, .04, 20), C.orange, -.95, 1.42, -.72 - i * .02, .4, .5);
-    rib.rotation.x = Math.PI / 2; rib.visible = i === 0;
+  const hub = add('haspel', CYL(.32, .32, 2.1, 24), C.silver, 0, 2.35, 0); hub.rotation.z = Math.PI / 2;
+  const coil = add('haspel', CYL(.93, .93, 1.8, 44), C.black, 0, 2.35, 0, .08, .95); coil.rotation.z = Math.PI / 2;
+  for (let i = 0; i < 14; i++)              // rib per lilitan pipa PE
+    add('haspel', TOR(.96, .068, 44), C.pipe, -.84 + i * .129, 2.35, 0, .08, .92).rotation.y = Math.PI / 2;
+  tube('haspel', [[.7, 1.55, .5], [.3, .85, .8], [-.7, .38, .85], [-2.1, .34, .6], [-3.4, .32, .3], [-4.6, .95, 0]], .062, C.black, .08, .9);
+  [-.7, -2.1].forEach(px => {               // coupling selang
+    const c = add('haspel', CYL(.1, .1, .22, 14), C.silver, px, px > -1 ? .4 : .36, .84);
+    c.rotation.z = Math.PI / 2.4;
+  });
+  /* == Antrieb: tower rangka di luar flange (-X), pulley sumbu X == */
+  add('antrieb', BOX(.06, 1.9, .16), C.yellow, -1.2, 2.0, -.55);
+  add('antrieb', BOX(.06, 1.9, .16), C.yellow, -1.2, 2.0, -1.35);
+  add('antrieb', BOX(.06, .14, .95), C.yellow, -1.2, 2.85, -.95);
+  add('antrieb', BOX(.06, .14, .95), C.yellow, -1.2, 1.35, -.95);
+  add('antrieb', BOX(.05, 1.5, 1.0), C.flange, -1.16, 2.2, -.95);
+  const tp = add('antrieb', CYL(.33, .33, .07, 28), C.silver, -1.44, 2.5, -.95); tp.rotation.z = Math.PI / 2;
+  add('antrieb', CYL(.09, .09, .12, 14), C.dark, -1.5, 2.5, -.95).rotation.z = Math.PI / 2;
+  const belt = add('antrieb', TOR(.11, .02), C.black, -1.44, 1.95, -.82);
+  belt.scale.set(1, 5.2, 1); belt.rotation.y = Math.PI / 2;
+  const gg = add('antrieb', CYL(.08, .08, .05, 14), C.white, -1.24, 2.6, -.42); gg.rotation.z = Math.PI / 2;
+  add('antrieb', CYL(.02, .02, .16, 8), C.silver, -1.32, 2.6, -.42).rotation.z = Math.PI / 2;
+  const door = add('antrieb', BOX(.045, 1.45, .95), C.yellow, -1.28, 2.05, -1.95);
+  door.rotation.y = -1.05;                   // pintu guard terbuka (foto 1)
+  /* == gearbox G4 biru di kaki tower == */
+  add('getriebe', BOX(.07, .5, .5), C.rust, -1.2, 1.05, -.95);
+  add('getriebe', BOX(.5, .56, .72), C.blue, -1.38, 1.28, -.95, .35, .5);
+  add('getriebe', BOX(.52, .05, .74), C.red, -1.38, 1.58, -.95, .35, .5);
+  const gi = add('getriebe', CYL(.14, .14, .06, 18), C.silver, -1.66, 1.5, -.7); gi.rotation.z = Math.PI / 2;
+  const go = add('getriebe', CYL(.25, .25, .07, 22), C.silver, -1.66, 1.12, -1.15); go.rotation.z = Math.PI / 2;
+  const gb = add('getriebe', TOR(.09, .018), C.black, -1.7, 1.3, -.92); gb.scale.set(1, 2.4, 1); gb.rotation.y = Math.PI / 2;
+  const gs = add('getriebe', CYL(.05, .05, .3, 12), C.silver, -1.8, 1.12, -1.15); gs.rotation.z = Math.PI / 2;
+  add('getriebe', BOX(.12, .03, .03), C.dark, -1.95, 1.12, -1.15);
+  /* == turbin + elbow inlet kuning ke hub drum == */
+  const vol = add('turbine', CYL(.37, .37, .4, 28), C.silver, -1.3, 2.5, -.95); vol.rotation.z = Math.PI / 2;
+  add('turbine', TOR(.35, .1, 28), C.silver, -1.3, 2.5, -.95).rotation.y = Math.PI / 2;
+  const cov = add('turbine', CYL(.24, .24, .1, 24), C.silver, -1.52, 2.5, -.95); cov.rotation.z = Math.PI / 2;
+  for (let k = 0; k < 6; k++) {
+    const a = k * Math.PI / 3;
+    add('turbine', CYL(.025, .025, .06, 8), C.dark, -1.56, 2.5 + Math.cos(a) * .3, -.95 + Math.sin(a) * .3).rotation.z = Math.PI / 2;
   }
-  const gsh = add('getriebe', CYL(.05, .05, .5, 12), C.silver, -.95, 1.42, -.95); gsh.rotation.x = Math.PI / 2;
-  add('getriebe', CYL(.05, .05, .06, 12), C.silver, -.7, 1.2, -.68, .3, .4).rotation.x = Math.PI / 2;
-  /* -- turbine -- */
-  const vol = add('turbine', CYL(.36, .36, .5, 28), C.silver, -1.85, 2.3, -.95); vol.rotation.x = Math.PI / 2;
-  add('turbine', TOR(.34, .1, 28), C.silver, -1.85, 2.3, -.95);
-  add('turbine', CYL(.12, .12, .8, 16), C.silver, -1.85, 2.95, -.95);
-  add('turbine', CYL(.2, .2, .08, 20), C.silver, -1.85, 3.35, -.95);
-  const outp = add('turbine', CYL(.11, .11, .9, 16), C.silver, -1.35, 2.3, -.95); outp.rotation.z = Math.PI / 2;
-  /* -- speed control -- */
-  add('regelung', BOX(.07, .07, 1.7), C.green, -2.45, 1.05, 0);
-  [.7, -.7].forEach(z => add('regelung', BOX(.5, .05, .05), C.green, -2.2, 1.05, z));
-  add('regelung', CYL(.035, .035, .5, 10), C.green, -1.95, 1.3, .55).rotation.z = .5;
-  add('regelung', BOX(.55, .42, .04), C.green, -1.35, 3.0, -.95);
-  /* -- winding mechanism -- */
-  add('wickel', BOX(1.15, .85, .05), C.blue, -.55, 1.95, 1.02);
-  const sp1 = add('wickel', CYL(.3, .3, .07, 22), C.dark, 0, 2.35, .95); sp1.rotation.x = Math.PI / 2;
-  const sp2 = add('wickel', CYL(.18, .18, .07, 18), C.dark, -.95, 1.42, .95); sp2.rotation.x = Math.PI / 2;
-  const ch = add('wickel', TOR(.28, .022), C.black, -.5, 1.9, .95); ch.scale.set(1, 1.9, 1); ch.rotation.z = .42;
-  /* -- hydr. supports -- */
+  tube('turbine', [[-1.3, 2.92, -.95], [-1.25, 3.25, -.9], [-1.05, 3.3, -.6], [-.95, 2.9, -.25], [-1.0, 2.45, -.05]], .13, C.yellow, .5, .45);
+  add('turbine', CYL(.17, .17, .08, 18), C.silver, -1.3, 2.95, -.95).rotation.z = Math.PI / 2;
+  /* == regulation: feeler bar + overwind guard == */
+  add('regelung', BOX(.06, .06, 1.8), C.yellow, -2.6, 1.12, 0);
+  [.75, -.75].forEach(z => add('regelung', BOX(.55, .05, .05), C.yellow, -2.33, 1.12, z));
+  add('regelung', CYL(.03, .03, .55, 10), C.yellow, -2.05, 1.35, .6).rotation.z = .5;
+  add('regelung', BOX(.6, .45, .04), C.yellow, -1.5, 3.05, -.95);
+  /* == winding: cover + sprocket rantai flange == */
+  add('wickel', BOX(.04, .75, .95), C.yellow, -1.24, 1.5, -.5);
+  const sp = add('wickel', CYL(.2, .2, .08, 20), C.dark, -1.72, 1.12, -1.15); sp.rotation.z = Math.PI / 2;
+  const ch2 = add('wickel', TOR(.21, .022), C.chain, -1.76, 1.5, -1.15); ch2.scale.set(1, 2.6, 1); ch2.rotation.y = Math.PI / 2;
+  add('wickel', CYL(.05, .05, .4, 10), C.silver, -1.72, 1.12, -.75).rotation.x = Math.PI / 2;
+  /* == penyangga hidrolis teleskopik kuning == */
   [[1, 1], [1, -1], [-1, 1], [-1, -1]].forEach(([sx, sz]) => {
-    const a = new THREE.Vector3(sx * 1.75, .95, sz * .72), b = new THREE.Vector3(sx * .95, 1.95, sz * .6);
+    const a = new THREE.Vector3(sx * 1.8, .95, sz * .75), b = new THREE.Vector3(sx * 1.0, 2.0, sz * .62);
     const dir = b.clone().sub(a), len = dir.length();
-    const o = add('abstuetzung', CYL(.07, .07, len * .55, 12), C.galv, 0, 0, 0);
+    const o = add('abstuetzung', CYL(.07, .07, len * .55, 12), C.yellow, 0, 0, 0);
     const i2 = add('abstuetzung', CYL(.045, .045, len * .6, 12), C.silver, 0, 0, 0);
     const mid = a.clone().add(b).multiplyScalar(.5);
-    [o, i2].forEach((m, k) => {
-      m.position.copy(mid).addScaledVector(dir.clone().normalize(), k ? .12 : -.12);
-      m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
+    [o, i2].forEach((m2, k) => {
+      m2.position.copy(mid).addScaledVector(dir.clone().normalize(), k ? .12 : -.12);
+      m2.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
     });
   });
-  /* -- wheel cart -- */
-  [.42, -.42].forEach(z => add('radstativ', BOX(1.5, .12, .1), C.red, -4.7, .62, z));
-  add('radstativ', BOX(.12, .12, .95), C.red, -4.0, .62, 0);
-  add('radstativ', BOX(.12, .12, .95), C.red, -5.4, .62, 0);
+  /* == kereta roda / gun cart kuning == */
+  [.42, -.42].forEach(z => add('radstativ', BOX(1.5, .12, .1), C.yellow, -4.7, .62, z));
+  add('radstativ', BOX(.12, .12, .95), C.yellow, -4.0, .62, 0);
+  add('radstativ', BOX(.12, .12, .95), C.yellow, -5.4, .62, 0);
   [-4.0, -5.4].forEach(x => [.55, -.55].forEach(z => {
-    const w = add('radstativ', CYL(.35, .35, .2, 22), C.rubber, x, .35, z); w.rotation.x = Math.PI / 2;
-    add('radstativ', CYL(.14, .14, .22, 14), C.silver, x, .35, z).rotation.x = Math.PI / 2;
+    const w = add('radstativ', CYL(.35, .35, .2, 22), C.mud, x, .35, z); w.rotation.x = Math.PI / 2;
+    add('radstativ', CYL(.14, .14, .22, 14), C.rust, x, .35, z).rotation.x = Math.PI / 2;
   }));
-  add('radstativ', BOX(.09, 1.0, .09), C.red, -4.7, 1.15, 0);
-  add('radstativ', BOX(.3, .22, .2), C.orange2, -4.7, 1.72, 0);
-  const noz = add('radstativ', CYL(.02, .06, .3, 12), C.silver, -4.7, 1.95, 0);
-  /* -- ecostar -- */
-  add('ecostar', BOX(.44, .58, .16), C.white, .55, 2.85, .98, .1, .6);
-  add('ecostar', BOX(.3, .2, .02), 0x20262c, .55, 2.95, 1.07, .1, .4);
-  add('ecostar', CYL(.015, .015, .5, 8), C.silver, .55, 3.3, .98);
-  const sol = add('ecostar', BOX(.62, .05, .42), C.solar, .55, 3.55, .98, .3, .35);
+  add('radstativ', BOX(.09, 1.0, .09), C.yellow, -4.7, 1.15, 0);
+  add('radstativ', BOX(.3, .22, .2), C.red, -4.7, 1.72, 0);
+  add('radstativ', CYL(.02, .06, .3, 12), C.silver, -4.7, 1.95, 0);
+  /* == ecostar: box kontrol kecil + solar mungil == */
+  add('ecostar', BOX(.13, .46, .36), C.white, -1.28, 2.75, -1.5, .1, .6);
+  add('ecostar', BOX(.02, .16, .24), 0x20262c, -1.35, 2.8, -1.5, .1, .4);
+  add('ecostar', CYL(.015, .015, .45, 8), C.silver, .62, 3.3, .9);
+  const sol = add('ecostar', BOX(.5, .04, .34), C.solar, .62, 3.52, .9, .3, .35);
   sol.rotation.z = .35;
-  add('ecostar', TOR(.05, .012, 12), C.silver, .55, 3.14, .98).rotation.x = Math.PI / 2;
 }
 buildMachine();
 const machine = new THREE.Group();
@@ -266,9 +302,9 @@ Object.entries(DIRS).forEach(([gid, d]) => group(gid).dir.set(...d).normalize())
 /* ---------------- labels ---------------- */
 const labels = [];
 const LOFF = {
-  fahrgestell: [0, -.15, 0], stuetzfuss: [.5, -.25, 0], drehgestell: [0, -.6, .9], haspel: [0, .5, 0],
-  antrieb: [0, .55, -.6], getriebe: [0, -.4, -.8], turbine: [-.7, .7, -.3], regelung: [-.7, .35, .5],
-  wickel: [0, .15, .8], abstuetzung: [.4, .05, .9], radstativ: [-.3, .6, 0], ecostar: [.3, .45, .3],
+  fahrgestell: [0, -.15, 0], stuetzfuss: [.5, -.25, 0], drehgestell: [0, -.6, .9], haspel: [0, .55, 0],
+  antrieb: [-.5, .75, -.4], getriebe: [-.9, -.35, -.5], turbine: [-.8, .85, -.2], regelung: [-.7, .35, .5],
+  wickel: [-.5, -.1, -.9], abstuetzung: [.4, .05, .9], radstativ: [-.3, .6, 0], ecostar: [-.4, .5, -.5],
 };
 function makeLabel(gid, text) {
   const cv = document.createElement('canvas');
@@ -294,7 +330,9 @@ function makeLabel(gid, text) {
   return sp;
 }
 GROUPS.forEach(g => makeLabel(g.gid, g.label));
-let labelsOn = true;
+let labelsOn = false;
+labels.forEach(l => l.visible = false);
+$('#lbl').classList.add('off');
 
 /* ---------------- interaction ---------------- */
 const ray = new THREE.Raycaster(), ptr = new THREE.Vector2(), _v3 = new THREE.Vector3();
@@ -350,7 +388,7 @@ function focusGroup(gid) {
   const to = c.clone().addScaledVector(dir, Math.max(rad * 2.4, 2.2));
   tween = { t: 0, dur: .9, fp: camera.position.clone(), tp: to, ft: controls.target.clone(), tt: c };
 }
-const HOME = { p: new THREE.Vector3(8.2, 4.3, -9.8), t: new THREE.Vector3(-0.7, 1.8, 0) };
+const HOME = { p: new THREE.Vector3(-9.9, 4.1, -7.5), t: new THREE.Vector3(-1.2, 2.0, -0.4) };
 function selectGroup(gid, focus) {
   if (selGid) setEmissive(selGid, 0x000000, 0);
   selGid = gid;
@@ -612,7 +650,10 @@ function loop(now) {
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
-setTimeout(() => $('#loadOverlay').classList.add('hidden'), 350);
+setTimeout(() => {
+  $('#loadOverlay').classList.add('hidden');
+  toast('Sketsa 3D menurut foto unit riil: klik part untuk breakdown &amp; kode sparepart • 🏷 label • 💥 exploded view');
+}, 400);
 
 /* test/debug hook */
 window.__APP = { select: selectGroup, focus: focusGroup, REG, camera, controls, FLAT, SEC,
