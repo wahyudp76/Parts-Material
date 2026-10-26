@@ -416,6 +416,10 @@ $('#zReset').onclick = () => {
 $('#rot').onclick = e => { controls.autoRotate = !controls.autoRotate; controls.autoRotateSpeed = 1.1; e.currentTarget.classList.toggle('off', !controls.autoRotate); };
 $('#lbl').onclick = e => { labelsOn = !labelsOn; labels.forEach(l => l.visible = labelsOn); e.currentTarget.classList.toggle('off', !labelsOn); };
 $('#foto').onclick = () => $('#fotoOverlay').classList.remove('hidden');
+document.querySelectorAll('#fotoOverlay .gal img').forEach(im => im.onclick = () => {
+  $('#modalBody').innerHTML = `<img src="${im.src}">`;
+  $('#modal').classList.remove('hidden');
+});
 $('#fotoClose').onclick = () => $('#fotoOverlay').classList.add('hidden');
 $('#explode').oninput = e => {
   const f = e.target.value / 100 * 1.9;
