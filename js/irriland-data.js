@@ -88,7 +88,7 @@ window.IRR = {
       mat: 'Steel', qty: 1, dx: 1.1, dy: -.3, code: null, cands: [] },
     { fig: '—', id: 'chain', g: 'cart', cart: true, ind: 'Rantai penahan cart', en: 'Cart stabilizer chains',
       mat: 'Steel chain', qty: 2, dx: 1.2, dy: .9, code: null, cands: [] },
-    { fig: '58', id: 'fork', g: 'cart', ind: 'Guide fork / level wind selang', en: 'Hose guide fork insert',
+    { fig: '58', id: 'fork', g: 'cart', ind: 'Gantry + guide fork (level wind)', en: 'Gantry frame + hose guide fork',
       mat: 'Nylon / steel', qty: 1, dy: 1.3, code: null, cands: [] }
   ]
 };

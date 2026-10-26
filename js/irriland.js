@@ -38,12 +38,13 @@
     add('chassis', BOX(3.2, .12, .9), M(COL.galvD), -.2, .5, 0);
     add('chassis', BOX(3.2, .1, .08), M(COL.galv), -.2, .62, .42);
     add('chassis', BOX(3.2, .1, .08), M(COL.galv), -.2, .62, -.42);
-    add('chassis', RZ(CYL(.06, .06, 1.5, 12)), M(COL.steel), -.2, .45, 0);
+    add('chassis', RZ(CYL(.06, .06, 1.5, 12)), M(COL.steel), -.2, .5, 0);
     [.78, -.78].forEach(z => {
-      add('wheel', RZ(CYL(.45, .45, .24, 26)), M(COL.rubber), -.2, .45, z);
-      add('wheel', RZ(CYL(.27, .27, .26, 20)), M(COL.silver), -.2, .45, z);
+      add('wheel', RZ(CYL(.5, .5, .26, 26)), M(COL.rubber), -.2, .5, z);
+      add('wheel', RZ(CYL(.3, .3, .28, 20)), M(COL.silver), -.2, .5, z);
     });
     add('turntable', CYL(.55, .55, .1, 28), M(COL.steel), -.2, .72, 0);
+    add('chassis', BOX(1.5, .3, .7), M(COL.galv), -.2, .82, 0);
 
     /* drawbar + kaki angkur + jack */
     add('drawbar', BOX(1.15, .09, .09), M(COL.galv), -2.15, .52, .2).rotation.y = .35;
@@ -58,85 +59,93 @@
     /* drum: flange ribbed + tube + coil PE + crown gear */
     [-.58, .58].forEach((z, i) => {
       const pid = i ? 'flangeB' : 'flangeA';
-      add(pid, RZ(CYL(1.15, 1.15, .06, 40)), M(COL.galv), -.2, 1.5, z);
+      add(pid, RZ(CYL(1.15, 1.15, .06, 40)), M(COL.galv), -.2, 1.95, z);
       for (let k = 0; k < 12; k++) {
         const a = k * Math.PI / 6;
-        const rib = add(pid, BOX(.07, 1.02, .04), M(COL.silver), -.2 + Math.cos(a) * .55, 1.5 + Math.sin(a) * .55, z + (i ? .045 : -.045));
+        const rib = add(pid, BOX(.07, 1.02, .04), M(COL.silver), -.2 + Math.cos(a) * .55, 1.95 + Math.sin(a) * .55, z + (i ? .045 : -.045));
         rib.rotation.z = a - Math.PI / 2;
       }
     });
-    add('drum', RZ(CYL(.35, .35, 1.1, 24)), M(COL.galv), -.2, 1.5, 0);
-    add('drum', RZ(CYL(.95, .95, 1.0, 32)), M(COL.hose), -.2, 1.5, 0);
-    [-.4, -.13, .13, .4].forEach(z => add('drum', TOR(.965, .022), M(COL.black), -.2, 1.5, z));
-    add('crown', TOR(.82, .05), M(COL.steel), -.2, 1.5, .66);
+    add('drum', RZ(CYL(.35, .35, 1.1, 24)), M(COL.galv), -.2, 1.95, 0);
+    add('drum', RZ(CYL(.95, .95, 1.0, 32)), M(COL.hose), -.2, 1.95, 0);
+    [-.4, -.13, .13, .4].forEach(z => add('drum', TOR(.965, .022), M(COL.black), -.2, 1.95, z));
+    add('crown', TOR(.82, .05), M(COL.steel), -.2, 1.95, .66);
     for (let k = 0; k < 28; k++) {
       const a = k * Math.PI / 14;
-      const t = add('crown', BOX(.06, .09, .06), M(COL.steel), -.2 + Math.cos(a) * .82, 1.5 + Math.sin(a) * .82, .66);
+      const t = add('crown', BOX(.06, .09, .06), M(COL.steel), -.2 + Math.cos(a) * .82, 1.95 + Math.sin(a) * .82, .66);
       t.rotation.z = a - Math.PI / 2;
     }
 
     /* jalur air tengah: elbow, seal, packing, o-ring, lip seal, hub can */
-    add('elbow', RZ(CYL(.12, .12, .35, 16)), M(COL.galv), -.2, 1.5, .78);
-    add('elbow', CYL(.12, .12, .75, 16), M(COL.galv), -.2, 1.12, .92);
+    add('elbow', RZ(CYL(.12, .12, .35, 16)), M(COL.galv), -.2, 1.95, .78);
+    add('elbow', CYL(.12, .12, 1.2, 16), M(COL.galv), -.2, 1.35, .92);
     add('elbow', CYL(.2, .2, .05, 20), M(COL.galvD), -.2, .76, .92);
-    add('seal', RZ(CYL(.14, .14, .08, 18)), M(COL.dark), -.2, 1.5, .68);
-    add('packing', RZ(TOR(.13, .03)), M(COL.silver), -.2, 1.5, .62);
-    add('oring', RZ(TOR(.15, .025)), M(COL.black), -.2, 1.5, .56);
-    add('lipseal', RZ(TOR(.17, .03)), M(COL.rubber), -.2, 1.5, .5);
-    add('hubcan', RZ(CYL(.3, .3, .38, 26)), M(COL.alu), -.2, 1.5, -.74);
-    add('hubcan', RZ(CYL(.33, .33, .1, 26)), M(COL.black), -.2, 1.5, -.66);
+    add('seal', RZ(CYL(.14, .14, .08, 18)), M(COL.dark), -.2, 1.95, .68);
+    add('packing', RZ(TOR(.13, .03)), M(COL.silver), -.2, 1.95, .62);
+    add('oring', RZ(TOR(.15, .025)), M(COL.black), -.2, 1.95, .56);
+    add('lipseal', RZ(TOR(.17, .03)), M(COL.rubber), -.2, 1.95, .5);
+    add('hubcan', RZ(CYL(.3, .3, .38, 26)), M(COL.alu), -.2, 1.95, -.74);
+    add('hubcan', RZ(CYL(.33, .33, .1, 26)), M(COL.black), -.2, 1.95, -.66);
 
     /* shield sisi -Z */
-    add('shield', BOX(2.3, 1.25, .05), M(COL.galv), -.2, 1.45, -.66);
-    add('shield', BOX(1.5, .4, .05), M(COL.galv), -.55, 2.2, -.66).rotation.z = .18;
+    const shp = new THREE.Shape();
+    shp.moveTo(-1.15, .78); shp.lineTo(1.15, .78); shp.lineTo(.72, 1.98); shp.lineTo(-.72, 1.98); shp.closePath();
+    add('shield', new THREE.ExtrudeGeometry(shp, { depth: .05, bevelEnabled: false }), M(COL.galv), -.2, 0, -.72);
 
     /* drive: turbin miring, gearbox+pinion, handwheel, dog, gauge, comp, nipple, hydhose, handpump */
-    const tb = add('turbine', CYL(.16, .16, .55, 20), M(COL.alu), -.85, 1.35, .82);
-    tb.rotation.set(.5, 0, .45);
-    add('turbine', TOR(.165, .025), M(COL.red), -.85, 1.35, .82).rotation.set(.5, 0, .45);
-    add('turbine', CYL(.05, .05, .5, 10), M(COL.galv), -.55, 1.62, .72).rotation.z = -.7;
-    add('gearbox', BOX(.4, .42, .32), M(COL.dark), -.2, 1.0, .82);
-    add('gearbox', RZ(CYL(.13, .13, .1, 16)), M(COL.steel), -.2, .68, .7);
-    add('handwheel', RZ(CYL(.15, .15, .04, 20)), M(COL.red), .18, .95, .98);
-    add('handwheel', BOX(.03, .12, .03), M(COL.dark), .18, .95, 1.06);
-    add('dog', BOX(.1, .22, .06), M(COL.steel), .55, 2.05, .6);
-    add('gauge', RZ(CYL(.08, .08, .04, 18)), M(COL.silver), -.75, 1.8, -.7);
-    add('comp', BOX(.9, .035, .035), M(COL.steel), .5, 1.02, .55);
-    for (let k = 0; k < 8; k++) add('nipple', CYL(.015, .015, .05, 8), M(COL.brass), -1.1 + k * .26, 2.1, -.68);
+    const tb = add('turbine', CYL(.15, .15, .62, 20), M(COL.alu), -1.0, 1.32, .8);
+    tb.rotation.z = .75;
+    add('turbine', TOR(.155, .025), M(COL.red), -1.0, 1.32, .8).rotation.set(Math.PI / 2, 0, .75);
+    add('turbine', RZ(CYL(.15, .15, .06, 18)), M(COL.dark), -1.2, 1.08, .8);
+    add('turbine', BOX(.05, .6, .03), M(COL.black), -1.02, .85, .8).rotation.z = .25;
+    add('turbine', BOX(.34, .1, .3), M(COL.galvD), -1.0, 1.02, .68);
+    add('gearbox', BOX(.42, .4, .3), M(COL.dark), -.5, .95, .72);
+    add('gearbox', BOX(.3, .3, .2), M(COL.dark), -.2, .8, .68);
+    add('gearbox', RZ(CYL(.13, .13, .12, 16)), M(COL.steel), -.2, .66, .68);
+    add('handwheel', RZ(CYL(.15, .15, .04, 20)), M(COL.red), -.75, .95, .95);
+    add('handwheel', BOX(.03, .12, .03), M(COL.dark), -.75, .95, 1.03);
+    add('dog', BOX(.1, .22, .06), M(COL.steel), .62, 2.62, .64);
+    add('gauge', RZ(CYL(.08, .08, .04, 18)), M(COL.silver), -.95, 1.72, -.75);
+    add('comp', BOX(1.3, .035, .035), M(COL.steel), .35, 1.0, .6).rotation.z = .06;
+    for (let k = 0; k < 8; k++) add('nipple', CYL(.015, .015, .05, 8), M(COL.brass), -1.1 + k * .26, 1.92, -.75);
     add('hydhose', CYL(.03, .03, .9, 10), M(COL.black), .6, .8, .6).rotation.z = 1.2;
     add('handpump', BOX(.22, .3, .18), M(COL.red), -1.35, .85, .55);
     add('handpump', CYL(.02, .02, .3, 8), M(COL.dark), -1.35, 1.1, .55).rotation.z = .5;
 
     /* sprinkler cart (pivot): truss, roda, gun, lift, chain */
-    add('cartframe', BOX(1.7, .07, .07), M(COL.galv), 2.3, .95, .5).rotation.z = .12;
-    add('cartframe', BOX(1.7, .07, .07), M(COL.galv), 2.3, .95, -.5).rotation.z = .12;
+    add('cartframe', BOX(1.7, .07, .07), M(COL.galv), 2.3, 1.05, .5).rotation.z = .22;
+    add('cartframe', BOX(1.7, .07, .07), M(COL.galv), 2.3, 1.05, -.5).rotation.z = .22;
     add('cartframe', BOX(.07, .07, 1.05), M(COL.galv), 1.7, .9, 0);
-    add('cartframe', BOX(.07, .07, 1.05), M(COL.galv), 2.9, 1.1, 0);
+    add('cartframe', BOX(.07, .07, 1.05), M(COL.galv), 2.95, 1.25, 0);
     add('cartframe', BOX(.08, .8, .08), M(COL.galv), 2.55, .55, .5);
     add('cartframe', BOX(.08, .8, .08), M(COL.galv), 2.55, .55, -.5);
     [.68, -.68].forEach(z => {
       add('cartwheel', RZ(CYL(.3, .3, .18, 24)), M(COL.rubber), 2.55, .3, z);
       add('cartwheel', RZ(CYL(.17, .17, .19, 18)), M(COL.silver), 2.55, .3, z);
     });
-    add('gun', CYL(.06, .06, .95, 14), M(COL.alu), 3.05, 1.55, 0);
-    add('gun', CYL(.09, .09, .22, 14), M(COL.alu), 3.05, 2.05, 0);
-    add('gun', CYL(.05, .04, .75, 12), M(COL.alu), 2.9, 2.45, 0).rotation.z = .55;
-    add('gun', BOX(.3, .02, .12), M(COL.silver), 2.68, 2.78, 0).rotation.z = .55;
+    add('gun', CYL(.06, .06, .95, 14), M(COL.alu), 3.05, 1.55, 0).rotation.z = -.18;
+    add('gun', CYL(.09, .09, .22, 14), M(COL.alu), 3.13, 2.02, 0);
+    add('gun', CYL(.05, .04, .75, 12), M(COL.alu), 2.98, 2.42, 0).rotation.z = .55;
+    add('gun', BOX(.3, .02, .12), M(COL.silver), 2.76, 2.75, 0).rotation.z = .55;
     add('lift', BOX(1.1, .06, .06), M(COL.steel), 1.35, .68, .38).rotation.z = .12;
     add('lift', BOX(1.1, .06, .06), M(COL.steel), 1.35, .68, -.38).rotation.z = .12;
     [[.3], [-.3]].forEach(([z]) => {
-      const a = new THREE.Vector3(.55, 2.35, z), b = new THREE.Vector3(2.1, 1.05, z * 1.7);
+      const a = new THREE.Vector3(-.5, 3.35, z), b = new THREE.Vector3(1.9, 1.15, z * 1.8);
       const dir = b.clone().sub(a);
       const ch = add('chain', CYL(.014, .014, dir.length(), 6), M(COL.chain), 0, 0, 0);
       ch.position.copy(a.clone().add(b).multiplyScalar(.5));
       ch.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
     });
     /* guide fork / level wind di atas drum + selang ke cart */
-    add('fork', BOX(.06, .5, .06), M(COL.galv), -.2, 2.62, .25);
-    add('fork', BOX(.06, .5, .06), M(COL.galv), -.2, 2.62, -.25);
-    add('fork', BOX(.12, .1, .62), M(COL.galv), -.2, 2.86, 0);
-    add('qcoupl', CYL(.05, .05, 1.7, 12), M(COL.hose), .55, 2.25, 0).rotation.z = -1.0;
+    add('fork', BOX(.07, 2.7, .07), M(COL.galv), -.85, 1.95, .42).rotation.z = -.3;
+    add('fork', BOX(.07, 2.7, .07), M(COL.galv), -.85, 1.95, -.42).rotation.z = -.3;
+    add('fork', BOX(.55, .09, .95), M(COL.galv), -.5, 3.32, 0);
+    add('fork', BOX(.06, .45, .06), M(COL.galv), -.5, 3.55, .25);
+    add('fork', BOX(.06, .45, .06), M(COL.galv), -.5, 3.55, -.25);
+    add('fork', BOX(.12, .1, .62), M(COL.galv), -.5, 3.78, 0);
+    add('qcoupl', CYL(.05, .05, 2.5, 12), M(COL.hose), .46, 2.7, 0).rotation.z = -.77;
     add('qcoupl', CYL(.07, .07, .16, 12), M(COL.alu), 1.35, 1.75, 0).rotation.z = -1.0;
+    add('qcoupl', CYL(.05, .05, 1.7, 12), M(COL.hose), 2.15, 1.9, 0).rotation.z = 1.45;
   }
 
   function label(txt) {
@@ -162,16 +171,24 @@
     if (inited) return; inited = true;
     const cv = $('irCanvas');
     renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+    renderer.shadowMap.enabled = true;
     renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-    scene = new THREE.Scene(); scene.background = new THREE.Color(0x0b0f14);
+    scene = new THREE.Scene(); scene.background = new THREE.Color(0xdfe9f2);
+    scene.fog = new THREE.Fog(0xdfe9f2, 26, 60);
     cam = new THREE.PerspectiveCamera(45, 2, .05, 300);
-    cam.position.set(4.9, 3.1, 5.9);
+    cam.position.set(5.6, 3.5, 6.6);
     ctl = new THREE.OrbitControls(cam, cv);
-    ctl.target.set(-.2, 1.5, 0); ctl.enableDamping = true; ctl.dampingFactor = .08;
-    scene.add(new THREE.HemisphereLight(0xbfd6e8, 0x2a2620, .85));
-    const dl = new THREE.DirectionalLight(0xffffff, .8); dl.position.set(4, 6, 3); scene.add(dl);
-    const dl2 = new THREE.DirectionalLight(0x88aaff, .3); dl2.position.set(-5, 3, -4); scene.add(dl2);
-    scene.add(new THREE.GridHelper(16, 32, 0x2a3644, 0x1a222c));
+    ctl.target.set(.3, 1.6, 0); ctl.enableDamping = true; ctl.dampingFactor = .08;
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x77808c, .95));
+    const dl = new THREE.DirectionalLight(0xfff1dc, .95); dl.position.set(7, 12, 5); dl.castShadow = true;
+    dl.shadow.mapSize.set(1024, 1024);
+    Object.assign(dl.shadow.camera, { left: -8, right: 8, top: 8, bottom: -8, near: 1, far: 40 });
+    scene.add(dl);
+    const dl2 = new THREE.DirectionalLight(0x9db8d2, .35); dl2.position.set(-5, 3, -4); scene.add(dl2);
+    const gnd = new THREE.Mesh(new THREE.CircleGeometry(34, 48), new THREE.MeshStandardMaterial({ color: 0x8f7350, roughness: 1 }));
+    gnd.rotation.x = -Math.PI / 2; gnd.receiveShadow = true; scene.add(gnd);
+    const grid = new THREE.GridHelper(30, 30, 0x7a6244, 0x6d573c);
+    grid.position.y = .01; grid.material.transparent = true; grid.material.opacity = .35; scene.add(grid);
     machine = new THREE.Group(); scene.add(machine);
     cartPivot = new THREE.Group(); cartPivot.position.copy(HINGE); machine.add(cartPivot);
     build();
@@ -179,6 +196,7 @@
       const t = d.fig !== '—' ? 'P' + d.fig : d.id.toUpperCase().slice(0, 4);
       const sp = label(t); P[d.id].grp.add(sp); sp.position.set(0, .5 + (i % 4) * .3, 0); P[d.id].lab = sp;
     });
+    machine.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
     ray = new THREE.Raycaster(); mouse = new THREE.Vector2();
     let down = null;
     cv.addEventListener('pointerdown', e => down = [e.clientX, e.clientY]);
@@ -310,7 +328,7 @@
     labels: v => { labelsOn = !!v; },
     boom: m => { boom = m; document.querySelectorAll('#irBoomPills button').forEach(b => b.classList.toggle('on', b.dataset.boom === m)); },
     zoom: f => { cam.position.sub(ctl.target).multiplyScalar(f).add(ctl.target); },
-    reset: () => { cam.position.set(4.9, 3.1, 5.9); ctl.target.set(-.2, 1.5, 0); ctl.autoRotate = false; },
+    reset: () => { cam.position.set(5.6, 3.5, 6.6); ctl.target.set(.3, 1.6, 0); ctl.autoRotate = false; },
     state: () => ({ exploded: expTarget, boom, sel, labels: labelsOn })
   };
 
