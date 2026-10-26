@@ -34,12 +34,30 @@ const fmtRp = n => (n == null || isNaN(n)) ? '-' :
   'Rp ' + Number(n).toLocaleString('id-ID', { maximumFractionDigits: 0 });
 const qtyOf = v => v.qty[model] != null ? v.qty[model] : (v.qty.ALL != null ? v.qty.ALL : '–');
 
+/* ---------------- toast ---------------- */
+let toastTimer = null;
+function toast(msg) {
+  const t = $('#toast');
+  t.innerHTML = msg; t.classList.remove('hidden');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.add('hidden'), 3200);
+}
+
 /* ---------------- top bar: model pills ---------------- */
 const pills = $('#modelPills');
+function applyModel(m) {
+  if (model === m) return;
+  model = m;
+  mScaleT = MSCALE[m]; wScaleT = WSCALE[m];
+  [...pills.children].forEach(c => c.classList.toggle('on', c.textContent === m));
+  refreshQty(true);
+  toast(`Model aktif <b>${m}</b> — skala mesin 3D & kolom qty disesuaikan (konfigurasi ${m}).`);
+}
 MODELS.forEach(m => {
   const b = document.createElement('button');
   b.textContent = m; b.className = m === model ? 'on' : '';
-  b.onclick = () => { model = m; [...pills.children].forEach(c => c.classList.toggle('on', c.textContent === m)); refreshQty(); };
+  b.title = 'Tampilkan konfigurasi & kebutuhan sparepart model ' + m;
+  b.onclick = () => applyModel(m);
   pills.appendChild(b);
 });
 
@@ -122,6 +140,7 @@ const BOX = (w, h, d) => new THREE.BoxGeometry(w, h, d);
 const CYL = (r1, r2, h, s = 24) => new THREE.CylinderGeometry(r1, r2, h, s);
 const TOR = (r, t, s = 28) => new THREE.TorusGeometry(r, t, 10, s);
 
+const WHEELS = [];
 const C = {
   galv: 0x9aa0a6, dark: 0x5b6470, orange: 0xd94f1e, orange2: 0xe06020, black: 0x232323,
   silver: 0xcfd4d9, white: 0xf2f2f2, yellow: 0xf2b705, green: 0x7fb069, blue: 0x4f7cac,
@@ -139,8 +158,8 @@ function buildMachine() {
   [-0.85, 0.45].forEach(x => {
     const ax = add('fahrgestell', CYL(.07, .07, 1.9, 12), C.dark, x, .48, 0); ax.rotation.x = Math.PI / 2;
     [.88, -.88].forEach(z => {
-      const w = add('fahrgestell', CYL(.48, .48, .3, 28), C.rubber, x, .48, z); w.rotation.x = Math.PI / 2;
-      add('fahrgestell', CYL(.2, .2, .32, 20), C.silver, x, .48, z).rotation.x = Math.PI / 2;
+      const w = add('fahrgestell', CYL(.48, .48, .3, 28), C.rubber, x, .48, z); w.rotation.x = Math.PI / 2; WHEELS.push(w);
+      const h = add('fahrgestell', CYL(.2, .2, .32, 20), C.silver, x, .48, z); h.rotation.x = Math.PI / 2; WHEELS.push(h);
     });
   });
   /* -- support legs -- */
@@ -227,6 +246,14 @@ function buildMachine() {
   add('ecostar', TOR(.05, .012, 12), C.silver, .55, 3.14, .98).rotation.x = Math.PI / 2;
 }
 buildMachine();
+const machine = new THREE.Group();
+scene.add(machine);
+Object.values(REG).forEach(r => machine.add(r.obj));
+
+/* per-model visual configuration (approximation): E1 terkecil -> E5 terbesar */
+const MSCALE = { E1: .84, E2: .92, E3: 1, E4: 1.08, E5: 1.16 };
+const WSCALE = { E1: .90, E2: .96, E3: 1, E4: 1.06, E5: 1.12 };
+let mScaleT = 1, wScaleT = 1;
 
 /* explode directions */
 const DIRS = {
@@ -411,7 +438,9 @@ function renderBreakdown(gid) {
 }
 function detailHtml(v, e) {
   const m = v.m;
-  let h = `<b>${v.vd || e.en}</b> — Bestell-Nr. <span class="pn">${v.pn}</span>`;
+  const qm = MODELS.map(mm => `<span class="qm ${mm === model ? 'qon' : ''}">${mm}: ${v.qty[mm] != null ? v.qty[mm] : (v.qty.ALL != null ? v.qty.ALL : '–')}</span>`).join('');
+  let h = `<b>${v.vd || e.en}</b> — Bestell-Nr. <span class="pn">${v.pn}</span>
+    <div class="qrow">Qty per model: ${qm}</div>`;
   if (m) {
     h += `<div class="kv">
       <span>Kode internal</span><span><b>${m.code}</b> (${m.kind === 'bauer-ref' ? 'referensi nomor Bauer tertulis di spreadsheet' : 'cocok oleh spesifikasi/DIN'})</span>
@@ -429,9 +458,14 @@ function detailHtml(v, e) {
   }
   return h;
 }
-function refreshQty() {
+function refreshQty(flash) {
   if (selGid) renderBreakdown(selGid);
   if (!$('#tab-all').classList.contains('hidden')) renderAll();
+  if (flash) {
+    document.querySelectorAll('#bdContent .qty, #allTable .qty').forEach(td => {
+      td.classList.remove('flash'); void td.offsetWidth; td.classList.add('flash');
+    });
+  }
 }
 
 /* ---------------- all-parts tab ---------------- */
@@ -450,7 +484,7 @@ function renderAll() {
   });
   $('#allCount').textContent = rows.length + ' baris';
   const show = rows.slice(0, 500);
-  $('#allTable').innerHTML = `<table class="parts"><thead><tr><th class="fig">Fig</th><th>Section</th><th>Bestell-Nr.</th><th>Deskripsi</th><th>Qty</th><th>Kode</th></tr></thead><tbody>` +
+  $('#allTable').innerHTML = `<table class="parts"><thead><tr><th class="fig">Fig</th><th>Section</th><th>Bestell-Nr.</th><th>Deskripsi</th><th>Qty<br>${model}</th><th>Kode</th></tr></thead><tbody>` +
     show.map(f => `<tr class="vrow" data-gid="${f.gid}" data-sid="${f.sid}" data-fig="${f.fig}" data-pn="${f.v.pn}">
       <td class="fig">${f.fig}</td><td class="muted">${SEC[f.sid].de}</td>
       <td><span class="pn">${f.v.pn}</span></td><td>${f.v.vd || f.en}</td>
@@ -562,6 +596,12 @@ function loop(now) {
     controls.target.lerpVectors(tween.ft, tween.tt, k);
     if (tween.t >= tween.dur) tween = null;
   }
+  const ms = machine.scale.x + (mScaleT - machine.scale.x) * .14;
+  machine.scale.setScalar(ms);
+  WHEELS.forEach(w => {
+    const s = w.scale.x + (wScaleT - w.scale.x) * .14;
+    w.scale.set(s, 1, s);
+  });
   labels.forEach(l => {
     const d = camera.position.distanceTo(l.getWorldPosition(_v3));
     const f = Math.min(Math.max(d / 11, .38), 1.25);
@@ -575,5 +615,6 @@ requestAnimationFrame(loop);
 setTimeout(() => $('#loadOverlay').classList.add('hidden'), 350);
 
 /* test/debug hook */
-window.__APP = { select: selectGroup, focus: focusGroup, REG, camera, controls, FLAT, SEC };
+window.__APP = { select: selectGroup, focus: focusGroup, REG, camera, controls, FLAT, SEC,
+  getModel: () => model, applyModel, machine };
 })();
